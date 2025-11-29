@@ -1,5 +1,8 @@
 import { DataSource } from "typeorm";
 import { DataSourceOptions } from "typeorm/data-source/DataSourceOptions";
+import { config } from "dotenv";
+import path from "path";
+config();
 
 let connectionOptions: DataSourceOptions = {
   type: process.env.DB_TYPE as "postgres",
@@ -10,8 +13,8 @@ let connectionOptions: DataSourceOptions = {
   database: process.env.DB_NAME || "db-name",
   synchronize: true,
   logging: false,
-  entities: ["src/**/*.entity{.ts,.js}"],
-  migrations: ["src/db/migrations/*{.ts,.js}"],
+  entities: [path.join(__dirname, "../**/*.entity{.ts,.js}")],
+  migrations: [path.join(__dirname, "../migrations/*{.ts,.js}")],
 };
 
 export default new DataSource({

@@ -1,5 +1,7 @@
 import { DataSource } from "typeorm";
 import { DataSourceOptions } from "typeorm/data-source/DataSourceOptions";
+import { config } from "dotenv";
+config();
 
 let connectionOptions: DataSourceOptions = {
   type: process.env.DB_TYPE as "postgres",

@@ -1,11 +1,11 @@
-import { Entity, PrimaryColumn, Column } from "typeorm";
+import { Entity, PrimaryColumn, Column, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity("users")
 export class Users {
-    @PrimaryColumn("varchar", { length: 32 })
+    @PrimaryGeneratedColumn("uuid")
     user_id: string;
 
-    @Column("varchar", { length: 255 })
+    @Column("varchar", { length: 255, unique: true })
     user_name: string;
 
     @Column("varchar", { length: 255 })

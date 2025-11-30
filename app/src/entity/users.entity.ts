@@ -1,5 +1,6 @@
-import { Entity, PrimaryColumn, Column, PrimaryGeneratedColumn } from "typeorm";
+import { Entity, PrimaryColumn, Column, PrimaryGeneratedColumn, OneToMany } from "typeorm";
 import { BaseEntity } from "./base.entity";
+import { Task } from "./tasks.entity";
 
 @Entity("users")
 export class Users extends BaseEntity {
@@ -11,4 +12,7 @@ export class Users extends BaseEntity {
 
     @Column("varchar", { length: 255 })
     password: string;
+
+    @OneToMany(() => Task, (task) => task.user)
+    tasks: Task[];
 }

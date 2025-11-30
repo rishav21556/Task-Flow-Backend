@@ -1,6 +1,7 @@
 import express from 'express';
 import AppDataSource from './src/db/dataSource';
 import AuthController from './src/modules/auth/auth.controller';
+import TaskController from './src/modules/tasks/tasks.controller';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -14,6 +15,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/auth', AuthController);
+app.use('/tasks', TaskController);
 
 // Initialize database connection
 AppDataSource.initialize()

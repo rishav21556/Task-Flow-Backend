@@ -1,5 +1,6 @@
 import express from 'express';
 import AppDataSource from './src/db/dataSource';
+import AuthController from './src/modules/auth/auth.controller';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -7,6 +8,8 @@ const PORT = process.env.PORT || 3000;
 app.get('/', (req, res) => {
   res.send('Hello, World!');
 });
+
+app.use('/auth', AuthController);
 
 // Initialize database connection
 AppDataSource.initialize()

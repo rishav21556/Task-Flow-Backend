@@ -1,0 +1,48 @@
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: rishav
+      POSTGRES_PASSWORD: rishav
+      POSTGRES_DB: todo_app
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U rishav -d todo_app"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DB_TYPE: postgres
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: rishav
+      DB_PASSWORD: rishav
+      DB_NAME: todo_app
+      NODE_ENV: development
+      JWT_SECRET: your_jwt_secret_key
+  pgadmin:
+      image: dpage/pgadmin4
+      environment:
+        PGADMIN_DEFAULT_EMAIL: social.rishav.2003@gmail.com
+        PGADMIN_DEFAULT_PASSWORD: rishav
+      ports:
+        - "8888:80" # Access pgAdmin via http://localhost:8888
+      logging:
+        driver: "none"
+      volumes:
+        - pgadmin-data:/var/lib/pgadmin
+
+volumes:
+  db-data:
+  pgadmin-data:

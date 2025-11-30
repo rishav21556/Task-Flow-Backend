@@ -294,13 +294,9 @@ lsof -ti:8000 | xargs kill -9
 - Check `sameSite` and `secure` cookie settings
 - Verify `credentials: 'include'` is set in frontend requests
 
-## 📝 License
-
-[Your License]
-
 ## 👥 Contributors
 
-[Your Name/Team]
+Rishav Raj
 
 ## 📞 Support
 

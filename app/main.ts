@@ -2,9 +2,20 @@ import express from 'express';
 import AppDataSource from './src/db/dataSource';
 import AuthController from './src/modules/auth/auth.controller';
 import TaskController from './src/modules/tasks/tasks.controller';
+import cors from 'cors';
+import cookieParser from 'cookie-parser';
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8000;
+
+// CORS middleware - must be before routes
+app.use(cors({
+  origin: 'http://localhost:3000', // your frontend URL
+  credentials: true
+}));
+
+// Middleware to parse cookies
+app.use(cookieParser());
 
 // Middleware to parse JSON bodies
 app.use(express.json());

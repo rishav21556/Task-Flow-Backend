@@ -78,8 +78,8 @@ router.post('/login', async (req: Request, res: Response) => {
 
         res.cookie('token', token, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: 'strict',
+            secure: true,
+            sameSite: 'none',
             maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
         });
     } catch (err) {
@@ -91,10 +91,31 @@ router.post('/login', async (req: Request, res: Response) => {
 router.post('/logout', (req: Request, res: Response) => {
     res.clearCookie('token', {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'strict',
+        secure: true,
+        sameSite: 'none',
     });
     res.status(200).json({ message: "Logout successful" });
+});
+
+router.get('/auth-verify', async (req: Request, res: Response) => {
+    const token = req.cookies.token;
+    if (!token) {
+        return res.status(401).json({ message: 'Unauthorized' });
+    }
+    try {
+        const jwtSecret = process.env.JWT_SECRET
+        if (!jwtSecret) {
+            return res.status(500).json({ message: 'JWT secret not configured' });
+        }
+        const decoded = jwt.verify(token, jwtSecret);
+        const user = await userRepository.findOne({ where: { user_id: (decoded as any).id } }); 
+        if (!user) {
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
+        res.status(200).json({ user: { id: user.user_id, username: user.user_name } });
+    } catch (error) {
+        return res.status(401).json({ message: 'Unauthorized' });
+    }
 });
 
 export default router;

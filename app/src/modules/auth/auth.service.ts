@@ -19,4 +19,8 @@ export class AuthService {
         return await this.userRepository.save(newUser);
     }
 
+    async verifyPassword(plainPassword: string, hashedPassword: string): Promise<boolean> {
+        return await bcrypt.compare(plainPassword, hashedPassword);
+    }
+
 }

@@ -10,7 +10,7 @@ const PORT = process.env.PORT || 8000;
 
 // CORS middleware - must be before routes
 app.use(cors({
-  origin: 'http://localhost:3000', // your frontend URL
+  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
   credentials: true
 }));
 
@@ -25,18 +25,25 @@ app.get('/', (req, res) => {
   res.send('Hello, World!');
 });
 
+// Health check endpoint for Render
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'ok' });
+});
+
 app.use('/auth', AuthController);
 app.use('/tasks', TaskController);
 
-// Initialize database connection
-AppDataSource.initialize()
-  .then(() => {
-    console.log('Database connected successfully');
-    
-    app.listen(PORT, () => {
-      console.log(`Server is running on http://localhost:${PORT}`);
+// Start server first, then connect to database
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+  
+  // Initialize database connection after server starts
+  AppDataSource.initialize()
+    .then(() => {
+      console.log('Database connected successfully');
+    })
+    .catch((error) => {
+      console.error('Error connecting to database:', error);
+      // Don't exit - let the server keep running for health checks
     });
-  })
-  .catch((error) => {
-    console.error('Error connecting to database:', error);
-  });
+});

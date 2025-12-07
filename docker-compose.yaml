@@ -41,5 +41,6 @@ services:
       NODE_ENV: development
       JWT_SECRET: your_jwt_secret_key
       PORT: 8000
+      FRONTEND_URL: https://task-flow-swart-three.vercel.app
 volumes:
   db-data: {}
